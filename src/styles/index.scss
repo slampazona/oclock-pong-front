@@ -1,0 +1,19 @@
+@use 'reset';
+@use 'vars';
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+body {
+  font-family: 'VT323', monospace;
+  background-color: vars.$lightblack;
+  color: vars.$white;
+  font-size: 4rem;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
