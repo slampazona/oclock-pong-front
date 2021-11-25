@@ -20,20 +20,68 @@ class Pong extends React.Component {
   componentDidMount() {
     this.context = this.canvasRef.current.getContext('2d');
     this.initializeGame();
+    document.addEventListener('keydown', this.onKeyDown);
+    document.addEventListener('keyup', this.onKeyUp);
   }
 
   componentWillUnmount() {
-    clearInterval(this.gameLoop);
-    this.gameLoop = null;
+    document.removeEventListener('keydown', this.onKeyDown);
+    document.removeEventListener('keyup', this.onKeyUp);
   }
 
+  /**
+   * Permet de récupérer les entrées clavier afin de faire bouger les paddles
+   * @param {KeyboardEvent} event
+   */
+  onKeyDown = (event) => {
+    if (event.code === 'KeyW') {
+      this.player1.directionUp(15);
+    }
+    else if (event.code === 'KeyS') {
+      this.player1.directionDown(15);
+    }
+
+    if (event.code === 'ArrowUp') {
+      this.player2.directionUp(15);
+    }
+    else if (event.code === 'ArrowDown') {
+      this.player2.directionDown(15);
+    }
+  }
+
+  /**
+   * Permet de récupérer le laché d'une entrées clavier
+   * afin d'arreter de faire bouger les paddles
+   * @param {KeyboardEvent} event
+   */
+  onKeyUp = (event) => {
+    if (event.code === 'KeyW') {
+      this.player1.directionUp(0);
+    }
+    else if (event.code === 'KeyS') {
+      this.player1.directionDown(0);
+    }
+
+    if (event.code === 'ArrowUp') {
+      this.player2.directionUp(0);
+    }
+    else if (event.code === 'ArrowDown') {
+      this.player2.directionDown(0);
+    }
+  }
+
+  /**
+   * C'est la boucle de jeu qui permet de raffraichir le canvas toutes les millisecondes
+   */
   loop = () => {
     window.requestAnimationFrame(this.loop);
-    // C'est la boucle de jeu qui permet de raffraichir le canvas toutes les millisecondes
     this.update();
     this.draw();
   }
 
+  /**
+   * Initialise le jeu en créant les joueurs et la balle
+   */
   initializeGame() {
     const { ballSize } = this.props;
 
@@ -43,17 +91,28 @@ class Pong extends React.Component {
     this.startGame();
   }
 
+  /**
+   * Démarre le jeu
+   */
   startGame() {
     this.loop();
     this.ball.throw();
   }
 
+  /**
+   * Permet de mettre à jour les différentes entitées
+   * Comme les positions, ou les collisions
+   */
   update() {
     this.ball.update();
     this.player1.update();
     this.player2.update();
   }
 
+  /**
+   * Fonction qui dessine 1 image du jeu dans le canvas,
+   * elle est appellée autant de fois qu'on veut dessiner le jeu
+   */
   draw() {
     const { context, props } = this;
     const { width, height } = props;
@@ -80,6 +139,10 @@ class Pong extends React.Component {
     this.ball.draw();
   }
 
+  /**
+   * En cas de point marqué par un joueur
+   * @param {Player} player - Le joueur qui a marqué le point
+   */
   playerWin(player) {
     player.win();
     this.ball.throw();
@@ -88,13 +151,17 @@ class Pong extends React.Component {
   render() {
     const { width, height } = this.props;
     return (
-      <div className="pong">
-        <canvas
-          ref={this.canvasRef}
-          width={width}
-          height={height}
-        />
-      </div>
+      <>
+        <h1 className="gameTitle">O'Pong</h1>
+
+        <div className="pong">
+          <canvas
+            ref={this.canvasRef}
+            width={width}
+            height={height}
+          />
+        </div>
+      </>
     );
   }
 }

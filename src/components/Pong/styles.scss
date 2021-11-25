@@ -4,7 +4,14 @@
   box-sizing: border-box;
 }
 
+.gameTitle {
+  font-size: 2em;
+  text-align: center;
+  margin-bottom: 0.5em;
+}
+
 .pong {
+  display: flex;
   margin: auto;
   text-align: center;
   box-shadow: 0px 0px 15px 5px #000000;
