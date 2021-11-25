@@ -69,6 +69,14 @@ module.exports = {
           filename: 'images/[hash][ext][query]'
         }
       },
+      // Sounds
+      {
+        test: /\.(?:mp3|wav)$/i,
+        loader: 'file-loader',
+        generator: {
+          filename: 'sounds/[hash][ext][query]'
+        }
+      },
       // Fonts and SVGs
       {
         test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,

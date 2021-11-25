@@ -1,3 +1,7 @@
+import soundPlayer from 'src/assets/sounds/pong_player.wav';
+import soundWall from 'src/assets/sounds/pong_wall.wav';
+import soundWin from 'src/assets/sounds/pong_win.wav';
+
 class Ball {
   game;
 
@@ -20,6 +24,10 @@ class Ball {
     this.size = size;
     this.x = 0;
     this.y = 0;
+
+    this.soundPlayer = new Audio(soundPlayer);
+    this.soundWall = new Audio(soundWall);
+    this.soundWin = new Audio(soundWin);
   }
 
   update() {
@@ -33,15 +41,18 @@ class Ball {
     // Vérification des collision
     if ((this.x + nextXPos) > gameWidth) {
       this.game.playerWin(player1);
+      this.soundWin.play();
       return;
     }
     if ((this.x + nextXPos) < 0) {
       this.game.playerWin(player2);
+      this.soundWin.play();
       return;
     }
 
     if ((this.y + nextYPos + this.size) > gameHeight || (this.y + nextYPos) < 0) {
       this.directionY = -this.directionY;
+      this.soundWall.play();
     }
 
     this.x += nextXPos;
@@ -49,10 +60,12 @@ class Ball {
 
     if (this.isPaddlePlayerCollision(player1)) {
       this.directionX = -this.directionX;
+      this.soundPlayer.play();
       this.speed += 0.3;
     }
     if (this.isPaddlePlayerCollision(player2)) {
       this.directionX = -this.directionX;
+      this.soundPlayer.play();
       this.speed += 0.3;
     }
   }
