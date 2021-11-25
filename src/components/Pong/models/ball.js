@@ -178,7 +178,8 @@ class Ball {
     if (!this.isVisible) {
       return;
     }
-    const { context } = this.game;
+    const { canvasRef } = this.game;
+    const context = canvasRef.current.getContext('2d');
 
     context.rect(this.x, this.y, this.size, this.size);
     context.fill();

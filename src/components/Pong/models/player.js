@@ -61,7 +61,9 @@ class Player {
    * Dessine le joueur dans le canvas de game
    */
   draw() {
-    const { context, props: { width: gameWidth } } = this.game;
+    const { canvasRef, props: { width: gameWidth } } = this.game;
+    const context = canvasRef.current.getContext('2d');
+
     context.rect(
       this.x,
       this.y,
