@@ -40,7 +40,7 @@ class Ball {
       return;
     }
 
-    if ((this.y + nextYPos) > gameHeight || (this.y + nextYPos) < 0) {
+    if ((this.y + nextYPos + this.size) > gameHeight || (this.y + nextYPos) < 0) {
       this.directionY = -this.directionY;
     }
 
