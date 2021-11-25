@@ -58,15 +58,30 @@ class Ball {
     this.x += nextXPos;
     this.y += nextYPos;
 
-    if (this.isPaddlePlayerCollision(player1)) {
-      this.directionX = -this.directionX;
-      this.soundPlayer.play();
+    [player1, player2].forEach((player) => {
+      if (this.isPaddlePlayerCollision(player)) {
+        this.playerBounce(player);
+      }
+    });
+  }
+
+  playerBounce(player) {
+    this.soundPlayer.play();
+    if (this.speed < 12) {
       this.speed += 0.3;
     }
-    if (this.isPaddlePlayerCollision(player2)) {
+
+    if (this.isTopPaddlePlayerCollision(player)) {
       this.directionX = -this.directionX;
-      this.soundPlayer.play();
-      this.speed += 0.3;
+      this.directionY = -Math.abs(Ball.getRandomDirection());
+    }
+    else if (this.isBottomPaddlePlayerCollision(player)) {
+      this.directionX = -this.directionX;
+      this.directionY = Math.abs(Ball.getRandomDirection());
+    }
+    else {
+      this.directionX = -this.directionX;
+      this.directionY = 0;
     }
   }
 
@@ -96,7 +111,21 @@ class Ball {
   isPaddlePlayerCollision(player) {
     return player.x < this.x + this.size
       && player.y < this.y + this.size
-      && this.x < player.x + (player.paddleWidth * (player.isPlayer1 ? 1 : 0))
+      && this.x < player.x + player.paddleWidth
+      && this.y < player.y + player.paddleHeight;
+  }
+
+  isTopPaddlePlayerCollision(player) {
+    return player.x < this.x + this.size
+      && player.y < this.y + this.size
+      && this.x < player.x + player.paddleWidth
+      && this.y < player.y + ((player.paddleHeight / 5) * 2);
+  }
+
+  isBottomPaddlePlayerCollision(player) {
+    return player.x < this.x + this.size
+      && (player.y + ((player.paddleHeight / 5) * 4)) < this.y + this.size
+      && this.x < player.x + player.paddleWidth
       && this.y < player.y + player.paddleHeight;
   }
 

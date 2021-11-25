@@ -7,9 +7,9 @@ class Player {
 
   score = 0;
 
-  paddleWidth = 10;
+  paddleWidth = 15;
 
-  paddleHeight = 75;
+  paddleHeight = 90;
 
   constructor(game, number) {
     this.game = game;
@@ -17,7 +17,7 @@ class Player {
 
     const { canvasRef, props: { width: gameWidth, height: gameHeight } } = this.game;
 
-    this.x = this.isPlayer1 ? 20 : (gameWidth - 75);
+    this.x = this.isPlayer1 ? 30 : (gameWidth - 30);
     this.y = this.isPlayer1 ? 10 : (gameHeight - 10 - this.paddleHeight);
 
     const rect = canvasRef.current.getBoundingClientRect();
