@@ -6,16 +6,19 @@ import classNames from 'classnames';
 import Player from './models/player';
 import Ball from './models/ball';
 import KeyboardKey from './KeyboardKey';
+import EndGameBoard from './EndGameBoard';
 
 // == Composant
 class Pong extends React.Component {
   state = {
     gameStarted: false,
+    gameFinished: false,
   }
 
   constructor(props) {
     super(props);
     this.canvasRef = React.createRef();
+    this.requestAF = null;
     this.player1 = null;
     this.player2 = null;
     this.context = null;
@@ -31,6 +34,7 @@ class Pong extends React.Component {
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onKeyDown);
     document.removeEventListener('keyup', this.onKeyUp);
+    cancelAnimationFrame(this.requestAF);
   }
 
   /**
@@ -78,7 +82,9 @@ class Pong extends React.Component {
    * C'est la boucle de jeu qui permet de raffraichir le canvas toutes les millisecondes
    */
   loop = () => {
-    window.requestAnimationFrame(this.loop);
+    // eslint-disable-next-line react/destructuring-assignment
+    if (!this.state.gameStarted) return;
+    this.requestAF = window.requestAnimationFrame(this.loop);
     this.update();
     this.draw();
   }
@@ -93,9 +99,7 @@ class Pong extends React.Component {
     this.player2 = new Player(this, 2);
     this.ball = new Ball(this, ballSize);
     this.draw();
-    setTimeout(() => {
-      this.startGame();
-    }, 2000);
+    this.startGame();
   }
 
   /**
@@ -104,9 +108,51 @@ class Pong extends React.Component {
   startGame = () => {
     this.setState({
       gameStarted: true,
+      gameFinished: false,
+    }, () => {
+      this.loop();
+      this.ball.throw();
     });
-    this.loop();
-    this.ball.throw();
+  }
+
+  stopGame = () => {
+    cancelAnimationFrame(this.requestAF);
+    this.setState({
+      gameStarted: false,
+      gameFinished: true,
+    }, () => {
+      // setTimeout(this.drawFinish);
+    });
+  }
+
+  drawFinish = () => {
+    const context = this.canvasRef.current.getContext('2d');
+    const { props } = this;
+    const { width, height } = props;
+
+    const rectWidth = width * 0.66;
+
+    // On vide le dessin précédent
+    context.clearRect((0), 0, width, height);
+
+    // Dessin de la ligne verticale
+    context.strokeStyle = '#fff';
+    context.beginPath();
+    context.setLineDash([10, 15]);
+    context.strokeRect((width * 0.3) / 2, 30, rectWidth, 150);
+    context.fillStyle = '#ffffff';
+    context.font = '10rem VT323, Monospace';
+    context.fillText('SCORE', (width / 2) - 175, 150);
+
+    context.font = '5rem VT323, Monospace';
+    context.fillText('Player 1', 100, 250);
+    context.fillText('Player 2', width - 350, 250);
+    context.font = '10rem VT323, Monospace';
+    context.fillText(this.player1.score, 175, 400);
+    context.fillText(this.player2.score, width - 275, 400);
+    // context.moveTo(playerZoneSize, 10);
+    // context.lineTo(playerZoneSize, height);
+    // context.stroke();
   }
 
   /**
@@ -124,7 +170,8 @@ class Pong extends React.Component {
    * elle est appellée autant de fois qu'on veut dessiner le jeu
    */
   draw = () => {
-    const context = this.canvasRef.current.getContext('2d');
+    const context = this.canvasRef?.current?.getContext('2d');
+    if (!context) return;
     const { props } = this;
     const { width, height } = props;
 
@@ -157,35 +204,46 @@ class Pong extends React.Component {
   playerWin(player) {
     player.win();
     this.ball.throw();
+    if (player.score >= 3) {
+      this.stopGame();
+    }
   }
 
   render() {
     const { width, height } = this.props;
-    const { gameStarted } = this.state;
+    const { gameStarted, gameFinished } = this.state;
 
     return (
       <>
         <h1 className="gameTitle">O'Pong</h1>
 
-        <div className="pongContainer">
+        {gameFinished ? (
+          <EndGameBoard
+            player1={this.player1}
+            player2={this.player2}
+            onRestartPress={this.initializeGame}
+          />
+        ) : (
+          <div className="pongContainer">
+            <div className={classNames('leftKeys', { paused: gameStarted })}>
+              <KeyboardKey keyValue="Z" />
+              <KeyboardKey keyValue="S" />
+            </div>
+            <div className="pong">
+              <canvas
+                ref={this.canvasRef}
+                width={width}
+                height={height}
+              />
+            </div>
 
-          <div className={classNames('leftKeys', { paused: gameStarted })}>
-            <KeyboardKey keyValue="Z" />
-            <KeyboardKey keyValue="S" />
+            <div className={classNames('rightKeys', { paused: gameStarted })}>
+              <KeyboardKey keyValue="↑" />
+              <KeyboardKey keyValue="↓" />
+            </div>
           </div>
-          <div className="pong">
-            <canvas
-              ref={this.canvasRef}
-              width={width}
-              height={height}
-            />
-          </div>
+        )}
 
-          <div className={classNames('rightKeys', { paused: gameStarted })}>
-            <KeyboardKey keyValue="↑" />
-            <KeyboardKey keyValue="↓" />
-          </div>
-        </div>
       </>
     );
   }
