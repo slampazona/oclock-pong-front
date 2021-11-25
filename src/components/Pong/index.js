@@ -2,23 +2,24 @@
 import './styles.scss';
 import React from 'react';
 import PropType from 'prop-types';
+import Player from './models/player';
+import Ball from './models/ball';
 
 // == Composant
 class Pong extends React.Component {
-  state = {
-    player1Score: 0,
-    player2Score: 0,
-  }
+  state = {}
 
   constructor(props) {
     super(props);
     this.canvasRef = React.createRef();
+    this.player1 = null;
+    this.player2 = null;
     this.context = null;
   }
 
   componentDidMount() {
     this.context = this.canvasRef.current.getContext('2d');
-    this.startGame();
+    this.initializeGame();
   }
 
   componentWillUnmount() {
@@ -26,26 +27,42 @@ class Pong extends React.Component {
     this.gameLoop = null;
   }
 
-  startGame() {
+  loop = () => {
     // C'est la boucle de jeu qui permet de raffraichir le canvas toutes les millisecondes
-    this.gameLoop = setInterval(() => {
-      this.draw();
-    }, 1);
+    this.update();
+    this.draw();
+    window.requestAnimationFrame(this.loop);
+  }
+
+  initializeGame() {
+    const { ballSize } = this.props;
+
+    this.player1 = new Player(this, 1);
+    this.player2 = new Player(this, 2);
+    this.ball = new Ball(this, ballSize);
+    this.startGame();
+  }
+
+  startGame() {
+    this.loop();
+    this.ball.throw();
+  }
+
+  update() {
+    this.ball.update();
+    this.player1.update();
+    this.player2.update();
   }
 
   draw() {
-    const { context, props, state } = this;
-    const { width, height, ballSize } = props;
+    const { context, props } = this;
+    const { width, height } = props;
 
     // Calcul de la taille d'une zone de joueur
     const playerZoneSize = width / 2;
 
-    // Dessin du score
-    context.font = '6rem Monospace';
-    context.fillText(state.player1Score, playerZoneSize / 2, 100);
-    context.fillText(state.player2Score, playerZoneSize + (playerZoneSize / 2), 100);
-    context.fillStyle = '#DEDEDE';
-    context.save();
+    // On vide le dessin précédent
+    context.clearRect(0, 0, width, height);
 
     // Dessin de la ligne verticale
     context.beginPath();
@@ -56,17 +73,17 @@ class Pong extends React.Component {
     context.strokeStyle = '#fff';
     context.save();
 
-    // Dessin d'un joueur
-    context.rect(10, 10, 10, 75);
-    context.fill();
-
-    // Dessin du joueur 2
-    context.rect(width - 20, 10, 10, 75);
-    context.fill();
+    // Dessin des joueurs
+    this.player1.draw();
+    this.player2.draw();
 
     // Dessin de la balle
-    context.rect(playerZoneSize - (ballSize / 2), height / 2, ballSize, ballSize);
-    context.fill();
+    this.ball.draw();
+  }
+
+  playerWin(player) {
+    player.win();
+    this.ball.throw();
   }
 
   render() {
