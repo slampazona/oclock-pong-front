@@ -28,10 +28,10 @@ class Pong extends React.Component {
   }
 
   loop = () => {
+    window.requestAnimationFrame(this.loop);
     // C'est la boucle de jeu qui permet de raffraichir le canvas toutes les millisecondes
     this.update();
     this.draw();
-    window.requestAnimationFrame(this.loop);
   }
 
   initializeGame() {
@@ -71,7 +71,6 @@ class Pong extends React.Component {
     context.lineTo(playerZoneSize, height);
     context.stroke();
     context.strokeStyle = '#fff';
-    context.save();
 
     // Dessin des joueurs
     this.player1.draw();

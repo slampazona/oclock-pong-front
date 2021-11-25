@@ -57,11 +57,11 @@ class Player {
       context.fillText(this.score, playerZoneSize + (playerZoneSize / 2), 100);
     }
     context.fillStyle = '#DEDEDE';
-    context.save();
+    // context.save();
   }
 
   win() {
-    this.score++;
+    this.score += 1;
   }
 }
 

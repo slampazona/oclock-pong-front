@@ -24,7 +24,7 @@ class Ball {
 
   update() {
     if (!this.visible) {
-      return false;
+      return;
     }
     const { props: { width: gameWidth, height: gameHeight }, player1, player2 } = this.game;
 
@@ -32,10 +32,12 @@ class Ball {
     const nextYPos = this.directionY * this.speed;
     // Vérification des collision
     if ((this.x + nextXPos) > gameWidth) {
-      return this.game.playerWin(player1);
+      this.game.playerWin(player1);
+      return;
     }
     if ((this.x + nextXPos) < 0) {
-      return this.game.playerWin(player2);
+      this.game.playerWin(player2);
+      return;
     }
 
     if ((this.y + nextYPos) > gameHeight || (this.y + nextYPos) < 0) {
