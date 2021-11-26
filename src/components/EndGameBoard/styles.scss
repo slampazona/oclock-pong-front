@@ -1,0 +1,34 @@
+@use 'src/styles/vars.scss';
+
+.endGameBoard {
+  padding: 1em;
+  &__title {
+    padding: 0.5rem 2rem;
+    text-transform: uppercase;
+    font-size: 2em;
+    border: 5px dashed white;
+    text-align: center;
+  }
+  &__container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+  &__player1,
+  &__player2 {
+    margin: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    h4 {
+      font-size: 2em;
+    }
+  }
+  &__buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

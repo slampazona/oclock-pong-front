@@ -1,0 +1,28 @@
+@use "src/styles/vars.scss";
+
+.scoreBoard {
+  padding: 0.2em;
+  border: 5px dashed white;
+  margin: 0.5em 0;
+  width: 100%;
+}
+
+.scores {
+  font-size: 1.5rem;
+  .score {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    &--header {
+      font-size: 2em;
+    }
+    .score__date {
+      flex: 1;
+    }
+
+    .score__player1,
+    .score__player2 {
+      width: 100px;
+    }
+  }
+}

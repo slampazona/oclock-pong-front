@@ -1,0 +1,48 @@
+@use 'src/styles/vars';
+
+.gameTitle {
+  font-size: 2em;
+  text-align: center;
+  margin-bottom: 0.1em;
+}
+
+.pong {
+  display: flex;
+  margin: auto;
+  text-align: center;
+  box-shadow: 0px 0px 15px 5px #00000052;
+  background-color: vars.$black;
+}
+
+.pongContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  &--start-button-container{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+.leftKeys,
+.rightKeys {
+  margin: 2rem;
+  display: flex;
+  flex-direction: column;
+  &.paused {
+    .keyboardKey {
+      animation: none;
+    }
+  }
+}
+
+.game {
+  &__headerButtons {
+    display: flex;
+    justify-content: space-between;
+  }
+}
