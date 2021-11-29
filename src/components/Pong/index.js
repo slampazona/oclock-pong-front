@@ -8,6 +8,7 @@ import {
 import LaunchPage from 'src/pages/LaunchPage';
 import GamePage from 'src/pages/GamePage';
 import ScoreBoard from 'src/pages/ScoreBoardPage';
+import PageNotFound from 'src/pages/PageNotFound';
 
 const Pong = () => (
   <Routes>
@@ -25,6 +26,10 @@ const Pong = () => (
       path="/scoreboard"
       exact
       element={<ScoreBoard />}
+    />
+    <Route
+      path="/*"
+      element={<PageNotFound />}
     />
   </Routes>
 );
