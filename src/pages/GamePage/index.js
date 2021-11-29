@@ -15,8 +15,10 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import './styles.scss';
 
 const GamePage = () => {
+  const winScoreMax = 3;
   const gameRef = useRef(null);
   const navigate = useNavigate();
+  const [scoreRemainingBeforeWin, setScoreRemainingBeforeWin] = useState(winScoreMax);
   const [gameStarted, setGameStarted] = useState(false);
   const [gameFinished, setGameFinished] = useState(false);
   const { setMusicButtonVisibleState, playMusic } = useBackgroundMusic();
@@ -27,6 +29,7 @@ const GamePage = () => {
   }, []);
 
   const startGame = useCallback(() => {
+    setScoreRemainingBeforeWin(winScoreMax)
     setGameFinished(false);
     setTimeout(() => {
       gameRef.current.startGame();
@@ -35,26 +38,8 @@ const GamePage = () => {
 
   return (
     <div className="game">
-      <div className="game__headerButtons">
-        <NavLink to="/">
-          <button
-            type="button"
-            className="launchPage__button button"
-          >
-            &lt; Main Menu
-          </button>
-        </NavLink>
-        <NavLink to="/scoreboard">
-          <button
-            type="button"
-            className="launchPage__button button"
-          >
-            &gt; Score Board
-          </button>
-        </NavLink>
-      </div>
       <h1 className="gameTitle">O'Pong</h1>
-
+      <p className="game__message">{scoreRemainingBeforeWin} more wins before the end</p>
       <div className="pongContainer">
         <div className={classNames('leftKeys', { paused: gameStarted })}>
           <KeyboardKey keyValue="Z" />
@@ -73,11 +58,19 @@ const GamePage = () => {
           ) : (
             <Game
               ref={gameRef}
+              width={720}
+              height={480}
               onStart={() => setGameStarted(true)}
-              onGameFinished={(player1Score, player2Score) => setGameFinished({
-                player1Score,
-                player2Score,
-              })}
+              winScore={winScoreMax}
+              onPlayerWin={(_, highestScore) => {
+                setScoreRemainingBeforeWin(winScoreMax-highestScore);
+              }}
+              onGameFinished={(player1Score, player2Score) => {
+                return setGameFinished({
+                  player1Score,
+                  player2Score,
+                });
+              }}
             />
           )}
 
@@ -91,6 +84,24 @@ const GamePage = () => {
           <KeyboardKey keyValue="↑" />
           <KeyboardKey keyValue="↓" />
         </div>
+      </div>
+      <div className="game__headerButtons">
+        <NavLink to="/">
+          <button
+            type="button"
+            className="launchPage__button button"
+          >
+            &lt; Main Menu
+          </button>
+        </NavLink>
+        <NavLink to="/scoreboard">
+          <button
+            type="button"
+            className="launchPage__button button"
+          >
+            &gt; Score Board
+          </button>
+        </NavLink>
       </div>
     </div>
   );

@@ -94,7 +94,7 @@ class Ball {
    */
   playerBounce(player) {
     this.soundPlayer.play();
-    if (this.speed < 12) {
+    if (this.speed < 10) {
       this.speed += 0.3;
     }
 
@@ -129,7 +129,7 @@ class Ball {
       setTimeout(() => {
         this.directionY = Ball.getRandomDirection();
         this.directionX = this.directionY * 2;
-        this.speed = 3;
+        this.speed = 2;
       }, 1000);
     }, 1000);
   }

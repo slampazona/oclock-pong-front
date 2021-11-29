@@ -1,5 +1,6 @@
 @use 'src/styles/vars';
 
+
 .gameTitle {
   font-size: 2em;
   text-align: center;
@@ -44,5 +45,11 @@
   &__headerButtons {
     display: flex;
     justify-content: space-between;
+    margin-top: 0.5em;
+  }
+  &__message {
+    text-align: center;
+    font-size: 1em;
+    margin-bottom: 0.2em;
   }
 }

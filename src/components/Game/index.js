@@ -197,9 +197,11 @@ class Game extends React.Component {
    * @param {Player} player - Le joueur qui a marqué le point
    */
   playerWin(player) {
-    const { onGameFinished, winScore } = this.props;
+    const { onGameFinished, winScore, onPlayerWin } = this.props;
     player.win();
     this.ball.throw();
+    
+    onPlayerWin && onPlayerWin(player, this.player1.score > this.player2.score ? this.player1.score : this.player2.score);
     // Si on atteint le score max on fini la partie
     if (player.score >= winScore) {
       this.stopGame();
@@ -226,15 +228,17 @@ Game.propTypes = {
   onGameFinished: PropType.func,
   onStart: PropType.func,
   winScore: PropType.number,
+  onPlayerWin: PropType.func,
 };
 
 Game.defaultProps = {
   width: 800,
   height: 600,
   ballSize: 15,
-  winScore: 1,
+  winScore: 5,
   onGameFinished: () => { },
   onStart: () => { },
+  onPlayerWin: () => { },
 };
 
 // == Export
