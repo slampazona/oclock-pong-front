@@ -42,8 +42,8 @@ const GamePage = () => {
       <p className="game__message">{scoreRemainingBeforeWin} more wins before the end</p>
       <div className="pongContainer">
         <div className={classNames('leftKeys', { paused: gameStarted })}>
-          <KeyboardKey keyValue="Z" />
-          <KeyboardKey keyValue="S" />
+          <KeyboardKey keyValue="A" />
+          <KeyboardKey keyValue="Q" />
         </div>
         <div className="pong">
           {gameFinished ? (

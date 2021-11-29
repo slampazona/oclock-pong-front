@@ -38,10 +38,10 @@ class Game extends React.Component {
    * @param {KeyboardEvent} event
    */
   onKeyDown = (event) => {
-    if (event.code === 'KeyW') {
+    if (event.code === 'KeyQ') {
       this.player1.directionUp(15);
     }
-    else if (event.code === 'KeyS') {
+    else if (event.code === 'KeyA') {
       this.player1.directionDown(15);
     }
 
@@ -59,10 +59,10 @@ class Game extends React.Component {
    * @param {KeyboardEvent} event
    */
   onKeyUp = (event) => {
-    if (event.code === 'KeyW') {
+    if (event.code === 'KeyQ') {
       this.player1.directionUp(0);
     }
-    else if (event.code === 'KeyS') {
+    else if (event.code === 'KeyA') {
       this.player1.directionDown(0);
     }
 
