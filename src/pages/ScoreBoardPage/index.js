@@ -1,50 +1,38 @@
 /**
 * @module src/components/ScoreBoard
 */
-import { useEffect } from 'react';
-import PropType from 'prop-types';
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useBackgroundMusic } from 'src/hooks';
 import ScoreBoard from 'src/components/ScoreBoard';
+import api from 'src/api';
 import './styles.scss';
 
 const ScoreBoardPage = () => {
   const { playMusic } = useBackgroundMusic();
+  const [statusMessage, setStatusMessage] = useState(null);
+  const [scores, setScores] = useState([]);
 
   useEffect(() => {
     playMusic();
+    setStatusMessage('Récupération des données en cours ...');
+    api.get('/score', { params: { limit: 15 } })
+      .then((response) => response?.data?.data || [])
+      .then((_scores) => {
+        setStatusMessage(null);
+        setScores(_scores);
+      })
+      .catch((error) => {
+        setStatusMessage(error.message);
+      });
   }, []);
 
   return (
     <div className="scoreBoardPage">
       <h2 className="scoreBoardPage__title">ScoreBoard</h2>
       <ScoreBoard
-        scores={[
-          {
-            id: 1,
-            player_1: 1,
-            player_2: 12,
-            date: new Date(),
-          },
-          {
-            id: 2,
-            player_1: 4,
-            player_2: 1,
-            date: new Date(),
-          },
-          {
-            id: 3,
-            player_1: 32,
-            player_2: 11,
-            date: new Date(),
-          },
-          {
-            id: 4,
-            player_1: 18,
-            player_2: 5,
-            date: new Date(),
-          },
-        ]}
+        message={statusMessage}
+        scores={scores}
       />
       <div className="scoreBoardPage__buttons">
         <NavLink to="/">

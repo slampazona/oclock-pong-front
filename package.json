@@ -48,6 +48,7 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
+    "axios": "^0.24.0",
     "classnames": "^2.3.1",
     "dayjs": "^1.10.7",
     "prop-types": "^15.7.2",
