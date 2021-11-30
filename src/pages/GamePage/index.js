@@ -4,7 +4,6 @@
 import {
   useState, useEffect, useRef, useCallback,
 } from 'react';
-import PropType from 'prop-types';
 import Game from 'src/components/Game';
 import classNames from 'classnames';
 import KeyboardKey from 'src/components/KeyboardKey';
@@ -29,7 +28,7 @@ const GamePage = () => {
   }, []);
 
   const startGame = useCallback(() => {
-    setScoreRemainingBeforeWin(winScoreMax)
+    setScoreRemainingBeforeWin(winScoreMax);
     setGameFinished(false);
     setTimeout(() => {
       gameRef.current.startGame();
@@ -63,14 +62,12 @@ const GamePage = () => {
               onStart={() => setGameStarted(true)}
               winScore={winScoreMax}
               onPlayerWin={(_, highestScore) => {
-                setScoreRemainingBeforeWin(winScoreMax-highestScore);
+                setScoreRemainingBeforeWin(winScoreMax - highestScore);
               }}
-              onGameFinished={(player1Score, player2Score) => {
-                return setGameFinished({
-                  player1Score,
-                  player2Score,
-                });
-              }}
+              onGameFinished={(player1Score, player2Score) => setGameFinished({
+                player1Score,
+                player2Score,
+              })}
             />
           )}
 

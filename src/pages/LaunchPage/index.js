@@ -1,8 +1,7 @@
 /**
 * @module src/pages/LaunchPage
 */
-import { useState, useEffect, useCallback } from 'react';
-import PropType from 'prop-types';
+import { useState, useCallback } from 'react';
 import { useBackgroundMusic } from 'src/hooks';
 import { NavLink } from 'react-router-dom';
 import './styles.scss';

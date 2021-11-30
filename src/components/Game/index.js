@@ -9,7 +9,7 @@ import Ball from './models/ball';
 class Game extends React.Component {
   state = {
     gameStarted: false,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -51,7 +51,7 @@ class Game extends React.Component {
     else if (event.code === 'ArrowDown') {
       this.player2.directionDown(15);
     }
-  }
+  };
 
   /**
    * Permet de récupérer le laché d'une entrées clavier
@@ -72,7 +72,7 @@ class Game extends React.Component {
     else if (event.code === 'ArrowDown') {
       this.player2.directionDown(0);
     }
-  }
+  };
 
   /**
    * C'est la boucle de jeu qui permet de raffraichir le canvas toutes les millisecondes
@@ -83,7 +83,7 @@ class Game extends React.Component {
     this.requestAF = window.requestAnimationFrame(this.loop);
     this.update();
     this.draw();
-  }
+  };
 
   /**
    * Initialise le jeu en créant les joueurs et la balle
@@ -95,7 +95,7 @@ class Game extends React.Component {
     this.player2 = new Player(this, 2);
     this.ball = new Ball(this, ballSize);
     this.draw();
-  }
+  };
 
   /**
    * Démarre le jeu
@@ -109,7 +109,7 @@ class Game extends React.Component {
       this.ball.throw();
       onStart();
     });
-  }
+  };
 
   stopGame = () => {
     cancelAnimationFrame(this.requestAF);
@@ -118,7 +118,7 @@ class Game extends React.Component {
     }, () => {
       // setTimeout(this.drawFinish);
     });
-  }
+  };
 
   drawFinish = () => {
     const context = this.canvasRef.current.getContext('2d');
@@ -148,7 +148,7 @@ class Game extends React.Component {
     // context.moveTo(playerZoneSize, 10);
     // context.lineTo(playerZoneSize, height);
     // context.stroke();
-  }
+  };
 
   /**
    * Permet de mettre à jour les différentes entitées
@@ -158,7 +158,7 @@ class Game extends React.Component {
     this.ball.update();
     this.player1.update();
     this.player2.update();
-  }
+  };
 
   /**
    * Fonction qui dessine 1 image du jeu dans le canvas,
@@ -190,7 +190,7 @@ class Game extends React.Component {
 
     // Dessin de la balle
     this.ball.draw();
-  }
+  };
 
   /**
    * En cas de point marqué par un joueur
@@ -200,8 +200,13 @@ class Game extends React.Component {
     const { onGameFinished, winScore, onPlayerWin } = this.props;
     player.win();
     this.ball.throw();
-    
-    onPlayerWin && onPlayerWin(player, this.player1.score > this.player2.score ? this.player1.score : this.player2.score);
+
+    if (onPlayerWin) {
+      onPlayerWin(
+        player,
+        this.player1.score > this.player2.score ? this.player1.score : this.player2.score,
+      );
+    }
     // Si on atteint le score max on fini la partie
     if (player.score >= winScore) {
       this.stopGame();

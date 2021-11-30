@@ -17,9 +17,9 @@ const EndGameBoard = ({
     api.post('/score', {
       player_1: player1Score,
       player_2: player2Score,
-      pseudo
+      pseudo,
     })
-      .then((_scores) => {
+      .then(() => {
         setStatusMessage('Le score a été sauvegardé avec succès');
         setTimeout(() => {
           setStatusMessage(null);
@@ -50,11 +50,12 @@ const EndGameBoard = ({
         <PromptButton
           message="Quel est ton pseudo ?"
           onValidation={onNewSaveScoreRequested}
-        >Save</PromptButton>
+        >Save
+        </PromptButton>
         <button type="button" className="endGameBoard__button button" onClick={onScoreBoardPress}>ScoreBoard</button>
       </div>
     </div>
-  )
+  );
 };
 
 EndGameBoard.propTypes = {

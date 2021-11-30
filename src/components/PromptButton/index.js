@@ -1,7 +1,9 @@
 /**
  * @module src/components/PromptButton
  */
-import { useState, useCallback, useEffect, useRef } from 'react';
+import {
+  useState, useCallback, useEffect, useRef,
+} from 'react';
 import PropType from 'prop-types';
 import './styles.scss';
 
@@ -11,9 +13,11 @@ const PromptButton = ({ message, onValidation, children }) => {
   const [text, setText] = useState('');
   const validateModal = useCallback((event) => {
     event.preventDefault();
-    onValidation && onValidation(text);
+    if (onValidation) {
+      onValidation(text);
+    }
     setOpen(false);
-  }, [text])
+  }, [text]);
 
   useEffect(() => {
     if (isOpen) {
@@ -43,7 +47,7 @@ const PromptButton = ({ message, onValidation, children }) => {
       }
       <button type="button" className="button" onClick={setOpen.bind(this, true)}>{children}</button>
     </>
-  )
+  );
 };
 
 PromptButton.propTypes = {
@@ -54,7 +58,8 @@ PromptButton.propTypes = {
 
 PromptButton.defaultProps = {
   message: '',
-  onValidation: () => { }
+  children: null,
+  onValidation: () => { },
 };
 
 export default PromptButton;
