@@ -2,7 +2,7 @@
 
 > :warning: **N'oublie pas d'aller faire un tour sur le [wiki du back](https://github.com/slampazona/oclock-pong/wiki), il y a pas mal d'informations importantes sur le fonctionnement global et les échanges entre front et back**
 
-![Screenshot](../.assets/screenshot.png)
+![Screenshot](./.assets/screenshot.png)
 
 ## :sunny: Pré-requis
 
